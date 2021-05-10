@@ -40,5 +40,6 @@ public:
             res = todo(res, tree[idx]);
             idx -= (idx & -idx); 
         }  
+        return res;
     } 
 };
