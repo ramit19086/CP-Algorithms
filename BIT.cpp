@@ -11,7 +11,7 @@ public:
         maxval = n;
     }
 
-    void todo(T a, T b) {     //can be modified accordingly
+    T todo(T a, T b) {     //can be modified accordingly
         return a + b;
     }
 
@@ -38,7 +38,7 @@ public:
         T res = 0;
         while(idx > 0) {
             res = todo(res, tree[idx]);
-            idx -= (idx & -dx); 
+            idx -= (idx & -idx); 
         }  
     } 
 };
