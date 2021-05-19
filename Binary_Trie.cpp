@@ -40,6 +40,17 @@ public:
             curr = curr->child[b];
         }
     }
+    
+    void remove(int val)
+    {
+        Node *curr = root;
+        for(int i=31;i>=0;i--)
+        {
+            bool b = (val>>i)&1;
+            curr->child[b]->cnt -= 1;
+            curr = curr->child[b];  
+        }
+    }
 
     // MAKE YOUR QUERY FUNCTION HERE
     
