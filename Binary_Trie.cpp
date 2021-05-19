@@ -21,6 +21,7 @@ private:
             child[0] = NULL, child[1] = NULL;
         }
     };
+    int bits = 31;    //handle accrodingly and remember to 1LL << i when increasing the bits;
 
 public:
     Node *root;
@@ -31,7 +32,7 @@ public:
     void insert(int val)
     {
         Node *curr = root;
-        for (int i = 31; i >= 0; i--)
+        for (int i = bits; i >= 0; i--)
         {
             bool b = (val >> i) & 1;
             if (curr->child[b] == NULL)
@@ -44,9 +45,9 @@ public:
     void remove(int val)
     {
         Node *curr = root;
-        for(int i=31;i>=0;i--)
+        for(int i = bits; i >= 0; i--)
         {
-            bool b = (val>>i)&1;
+            bool b = (val >> i) & 1;
             curr->child[b]->cnt -= 1;
             curr = curr->child[b];  
         }
