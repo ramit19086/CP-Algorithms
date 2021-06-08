@@ -1,27 +1,16 @@
-#include <bits/stdc++.h>
-
-using namespace std;
 template <typename T>
-class SegTree // 1 indexed segment tree
+class SegTree
 {
 private:
-    // vector<T> lazy_tree; //use only if needed
-public:
-    int n, val;
-    vector<T> tree;
-    SegTree(int _n, T val)
-    {
-        n = _n;
-        tree = vector<T>(4 * n + 10, val);
-    }
-
+    int __st, __end, val;
+    T *tree;
+    T *lazy;
     void merge(T &c, T l, T r) //modify accordingly now it is for sum
     {
         c = l + r;
         return;
     }
-
-    void build(vector<T> &a, int st, int end, int node = 1)
+    void _build(vector<T> &a, int st, int end, int node)
     {
         if (st == end)
         {
@@ -29,12 +18,20 @@ public:
             return;
         }
         int mid = (st + end) / 2;
-        build(a, st, mid, 2 * node);
-        build(a, mid + 1, end, 2 * node + 1);
+        _build(a, st, mid, 2 * node);
+        _build(a, mid + 1, end, 2 * node + 1);
         merge(tree[node], tree[2 * node], tree[2 * node + 1]);
     }
 
-    void update(int pos, T val, int st, int end, int node = 1)
+    void push(int node,int st,int mid,int end)
+    {
+        tree[node * 2] += lazy[node] * (mid - st + 1);
+        lazy[node * 2] += lazy[node];
+        tree[node * 2 + 1] += lazy[node] * (end - mid);
+        lazy[node * 2 + 1] += lazy[node];
+        lazy[node] = 0;
+    }
+    void _update(int pos, T val, int st, int end, int node)
     {
         if (st == end)
         {
@@ -43,23 +40,73 @@ public:
         }
         int mid = (st + end) / 2;
         if (mid < pos)
-            update(pos, val, mid + 1, end, 2 * node + 1);
+            _update(pos, val, mid + 1, end, 2 * node + 1);
         else
-            update(pos, val, st, mid, 2 * node);
+            _update(pos, val, st, mid, 2 * node);
+        merge(tree[node], tree[2 * node], tree[2 * node + 1]);
+    }
+    void __update(int L, int R, T val, int st, int end, int node)
+    {
+        if (L > R || st > R || end < L)
+            return;
+        if (L <= st && end <= R)
+        {
+            tree[node] += val * (end - st + 1);
+            lazy[node] += val;
+            return;
+        }
+        int mid = (st + end) / 2;
+        push(node,st,mid,end);
+        __update(L, R, val, st, mid, 2 * node); __update(L, R, val, mid + 1, end, 2 * node + 1);
         merge(tree[node], tree[2 * node], tree[2 * node + 1]);
     }
 
-    //make range update query accordingly if you want
-
-    T query(int l, int r, int st, int end, int node = 1)
+    T _query(int L, int R, int st, int end, int node)
     {
-        if (st > r || end < l)
-            return 0; //handle accordingly for sum we return 0 in this case
-        if (st >= l && end <= r)
+        if (L > R || st > R || end < L)            //for sum return 0
+            return 0;               
+        if (st >= L && end <= R)
             return tree[node];
-        int mid = (st + end) / 2;
+        int mid = (st + end) / 2; 
+        push(node,st,mid,end);
         T ans;
-        merge(ans, query(l, r, st, mid, 2 * node), query(l, r, mid + 1, end, 2 * node + 1));
+        merge(ans, _query(L, R, st, mid, 2 * node), _query(L, R, mid + 1, end, 2 * node + 1));
         return ans;
+    }
+
+public:
+    SegTree(int _st, int _end, T val)
+    {
+        __st = _st;
+        __end = _end;
+        tree = new T[4 * __end + 10];
+        lazy = new T[4 * __end + 10];
+        for (int i = 0; i < 4 * __end + 10; i++)
+            tree[i] = val, lazy[i] = 0;
+    }
+
+    ~SegTree()
+    {
+        delete[] tree, delete[] lazy;
+    }
+
+    void bulid(vector<T> &a)
+    {
+        _build(a, __st, __end, 1);
+    }
+
+    void update(int pos, T val)
+    {
+        _update(pos, val, __st, __end, 1);
+    }
+
+    void updateRange(int L, int R, T val)
+    {
+        __update(L, R, val, __st, __end, 1);
+    }
+
+    T query(int l, int r)
+    {
+        return _query(l, r, __st, __end, 1);
     }
 };
