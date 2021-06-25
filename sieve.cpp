@@ -5,10 +5,7 @@ void pre()
 	for (int i = 2; i <= mxn; i++)
 	{
 		if (!spf[i])
-		{
-			spf[i] = i;
-			primes.push_back(i);
-		}
+			spf[i] = i, primes.push_back(i);
 		for (int j = 0; j < primes.size() && primes[j] <= spf[i] && i * primes[j] <= mxn; j++)
 			spf[i * primes[j]] = primes[j];
 	}
