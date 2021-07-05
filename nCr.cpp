@@ -1,5 +1,5 @@
+const int N = 1e5;
 const int mod = 1e9 + 7;
-const int N = 410;
 int mul(int a, int b) { return ((a % mod) * (b % mod)) % mod; }
 int sub(int a, int b) { return (((a - b) % mod) + mod) % mod; }
 int add(int a, int b) { return ((a + b) % mod); }
