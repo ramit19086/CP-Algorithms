@@ -7,13 +7,8 @@ int add(int a, int b) { return ((a + b) % mod); }
 int power(int x, int y, int M)
 {
     int res = 1;
-    while (y > 0)
-    {
-        if (y & 1)
-            res = (res * x) % M;
-        y >>= 1;
-        x = (x * x) % M;
-    }
+    for (; y > 0; x = (x * x) % M, y >>= 1)
+        if (y & 1) res = (res * x) % M;
     return res % M;
 }
 int mi(int x) { return power(x, mod - 2, mod); }
