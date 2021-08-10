@@ -4,12 +4,12 @@ int mul(int a, int b) { return ((a % mod) * (b % mod)) % mod; }
 int sub(int a, int b) { return (((a - b) % mod) + mod) % mod; }
 int add(int a, int b) { return ((a + b) % mod); }
 
-int power(int x, int y, int M)
+int power(int x, int y)
 {
     int res = 1;
-    for (; y > 0; x = (x * x) % M, y >>= 1)
-        if (y & 1) res = (res * x) % M;
-    return res % M;
+    for (; y > 0; x = (x * x) % mod, y >>= 1)
+        if (y & 1) res = (res * x) % mod;
+    return res;
 }
 int mi(int x) { return power(x, mod - 2, mod); }
 int fac[N + 1];
