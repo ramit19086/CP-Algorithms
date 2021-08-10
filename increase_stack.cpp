@@ -12,6 +12,6 @@ void func()
                         // compiling it will change the int to long long which will give compilation errors
 
 //In competitive programming sometimes it's the case that you declare some arrays or makes recursive functions 
-//that go for like 2e5 iterations and then your system then you get a run time error as SIGSEGV or in this specific case
+//that go for like 2e5 iterations and then your system get a run time error as SIGSEGV or in this specific case
 //stack overflow. The reason for this is that by default stack size is limited to some 1MB but if you want to run the big test case
 //then in that case you would have to increase the stack size. The function above increases the stack size to the memory you specify.
