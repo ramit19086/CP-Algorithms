@@ -1,10 +1,9 @@
-
 template <typename T>
 class SegTree
 {
 private:
     int __st, __end, val;
-    T *tree, *lazy;
+    vector<T> tree, lazy;
     void merge(T &c, T l, T r) //modify accordingly now it is for sum change push and update also
     {
         c = l + r;
@@ -54,10 +53,11 @@ private:
     }
     T _query(int L, int R, int st, int end, int node)
     {
-        if (st > R || end < L)  return 0;  // for sum return 0;
+        if (st > R || end < L)  return T(0);  // for sum return 0;
         if (st >= L && end <= R) return tree[node];
         int mid = (st + end) / 2;
-        push(node, st, mid, end); T ans;
+        push(node, st, mid, end); 
+        T ans;
         merge(ans, _query(L, R, st, mid, 2 * node), _query(L, R, mid + 1, end, 2 * node + 1));
         return ans;
     }
@@ -65,13 +65,10 @@ public:
     SegTree(int _st, int _end, T val)
     {
         __st = _st, __end = _end;
-        tree = new T[4 * __end + 10], lazy = new T[4 * __end + 10];
-        for (int i = 0; i < 4 * __end + 10; i++)
-            tree[i] = val, lazy[i] = 0;
+        int ss = 1 << (__lg(max(2LL, __end - __st + 1) - 1) + 2);
+        tree.resize(ss, val);
+        lazy.resize(ss, T(0));
     }
-
-    ~SegTree() { delete[] tree, delete[] lazy; }
-
     void bulid(vector<T> &a) { _build(a, __st, __end, 1); }
 
     void update(int pos, T val) { _update(pos, val, __st, __end, 1); }
