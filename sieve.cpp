@@ -1,7 +1,9 @@
-const int mxn = 1e7;
-vector<int> spf(mxn + 1), primes;
+const int mxn = 2e7;
+int spf[mxn + 1];
+vector<int> primes;
 void pre()
 {
+	spf[0] = spf[1] = 1;
 	for (int i = 2; i <= mxn; i++)
 	{
 		if (!spf[i])
