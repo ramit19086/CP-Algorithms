@@ -4,11 +4,11 @@ class DSU
 {
 private:
     int n;
-    vector<int> rank, parent;
+    vector<int> rank, parent, size;
 public:
     DSU(int n = 1) : n(n)
     {
-        rank = vector<int>(n + 1), parent = vector<int>(n + 1);
+        rank = vector<int>(n + 1), parent = vector<int>(n + 1), size = vector<int>(n + 1, 1);
         for (int i = 1; i <= n; i++)
             parent[i] = i;
     }
@@ -29,6 +29,11 @@ public:
         parent[b] = a;
         if (rank[a] == rank[b])
             rank[a]++;
+        size[a] += size[b];
         return 1;
+    }
+    int Component_size(int a)
+    {
+        return size[Find(a)];
     }
 };
