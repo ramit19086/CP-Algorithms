@@ -16,7 +16,9 @@ vvi multiply_matrix(vvi a, vvi b)
 vvi power(vvi a, int expo)
 {
     int n = a.size();
-    vvi mul(n, vi(n, 1));
+    vvi mul(n, vi(n));
+    for(int i = 0; i < n; i++)
+        mul[i][i] = 1;
     for (; expo > 0; expo >>= 1, a = multiply_matrix(a, a))
         if (expo & 1)
             mul = multiply_matrix(mul, a);
