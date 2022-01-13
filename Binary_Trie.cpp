@@ -66,6 +66,33 @@ public:
         }
         return ans;
     }
+    
+    int count_xor_greaterthan(int val,int k) 
+    {
+        Node* curr = root;
+        int ans = 0;
+        for(int i = 31;i>=0;i--)
+        {
+            bool b1 = (val >> i) & 1;
+            bool b2 = (k >> i) & 1;
+            if(b2)
+            {
+                if(curr->child[1-b1] == NULL||curr->child[1-b1] == 0)
+                    return ans;
+                curr = curr->child[1-b1];
+            }
+            else
+            {
+                if(curr->child[1-b1] != NULL)
+                    ans += curr->child[1-b1]->cnt;
+                if(curr->child[b1] != NULL)
+                    curr = curr->child[b1];
+                else
+                    return ans;
+            }
+        }
+       return ans + curr->cnt;
+    }
 
     // MAKE YOUR QUERY FUNCTION HERE
     
