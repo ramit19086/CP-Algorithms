@@ -52,6 +52,20 @@ public:
             curr = curr->child[b];  
         }
     }
+    
+    int Max_XOR(int val) {
+        Node* curr = root;
+        int ans = 0;
+        for (int i = bits; i >= 0; i--)
+        {
+            bool b = (val >> i) & 1;
+            if (curr->child[1 - b] != NULL and curr->child[1 - b]->cnt > 0)
+                ans |= 1LL << i, curr = curr->child[1 - b];
+            else
+                curr = curr->child[b];
+        }
+        return ans;
+    }
 
     // MAKE YOUR QUERY FUNCTION HERE
     
