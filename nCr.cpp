@@ -24,9 +24,6 @@ void pre()
     for (int i = N - 1; i > 0; i--)
         invfac[i] = mul(invfac[i + 1], i + 1);
     invfac[0] = 1;
-    p2[0] = 1;
-    for (int i = 1; i <= N; i++)
-        p2[i] = mul(p2[i - 1], 2);
 }
 
 int nCr(int x, int r)
