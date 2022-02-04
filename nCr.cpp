@@ -11,7 +11,7 @@ int power(int x, int y)
         if (y & 1) res = (res * x) % mod;
     return res;
 }
-int mi(int x) { return power(x, mod - 2, mod); }
+int mi(int x) { return power(x, mod - 2); }
 int fac[N + 1];
 int invfac[N + 1];
 
