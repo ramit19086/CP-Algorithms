@@ -1,68 +1,26 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-template <typename T>
-class RMQ
-{
-public:
-    int n, k;
-    vector<vector<T>> ans;
-    vector<int> myLog;
-    //Takes any of the idempotent function
-    //for example min in this case                     (IF YOU WANT TO USE SUM MODIFY THE TODO AND QUERY ACCORDINGLY)
-    T todo(T a, T b)
-    {
-        return min(a, b);
+template <typename T, class F = function<T(const T&, const T&)>>
+class SparseTable {
+ public:
+  int n;
+  vector<vector<T>> mat;
+  F func;
+ 
+  SparseTable(const vector<T>& a, const F& f) : func(f) {
+    n = static_cast<int>(a.size());
+    int max_log = 32 - __builtin_clz(n);
+    mat.resize(max_log);
+    mat[0] = a;
+    for (int j = 1; j < max_log; j++) {
+      mat[j].resize(n - (1 << j) + 1);
+      for (int i = 0; i <= n - (1 << j); i++) {
+        mat[j][i] = func(mat[j - 1][i], mat[j - 1][i + (1 << (j - 1))]);
+      }
     }
-
-    // /USEFUL AS NO ACCURACY ERRORS FOR OUR USE CASE AND FAST ALSO
-    void computeLog(int n)
-    {
-        myLog.resize(n + 1);
-        myLog[1] = 0;
-        for (int i = 2; i < n; i++)
-            myLog[i] = myLog[i / 2] + 1;
-    }
-
-    RMQ(vector<T> &a)
-    {
-        n = a.size();
-        computeLog(n);
-        k = myLog[n] + 1;
-        init(a);
-    }
-
-    void init(vector<T> &a)
-    {
-        ans.resize(n);
-        for (int i = 0; i < n; i++)
-            ans[i].resize(k);
-        for (int i = 0; i < n; i++)
-            ans[i][0] = a[i];
-        int temp = 1;
-        for (int j = 1; j <= k; j++)
-        {
-            temp <<= 1;
-            for (int i = 0; i + temp <= n; i++)
-                ans[i][j] = todo(ans[i][j - 1], ans[i + temp / 2][j - 1]);
-        }
-    }
-
-    //modify the query accordingly
-    T query(int L, int R)
-    {
-        int j = myLog[R - L + 1];
-        return todo(ans[L][j], ans[R - (1 << j) + 1][j]);
-
-        //In case of sum use this 
-        // long long sum = 0;
-        // for (int j = k; j >= 0; j--)
-        // {
-        //     if ((1 << j) <= R - L + 1)
-        //     {
-        //         sum += ans[L][j];
-        //         L += 1 << j;
-        //     }
-        // }
-    }
+  }
+ 
+  T get(int from, int to) const {
+    assert(0 <= from && from <= to && to <= n - 1);
+    int lg = 32 - __builtin_clz(to - from + 1) - 1;
+    return func(mat[lg][from], mat[lg][to - (1 << lg) + 1]);
+  }
 };
